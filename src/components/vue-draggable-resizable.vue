@@ -550,6 +550,7 @@ export default {
       this.rawRight = mouseClickPosition.right + deltaX
 
       this.$emit('dragging', this.left, this.top)
+      this.emitUpdates()
     },
     handleMove (e) {
       const handle = this.handle
@@ -573,6 +574,7 @@ export default {
       }
 
       this.$emit('resizing', this.left, this.top, this.width, this.height)
+      this.emitUpdates()
     },
     handleUp (e) {
       this.handle = null
@@ -592,6 +594,7 @@ export default {
         this.dragging = false
         this.$emit('dragstop', this.left, this.top)
       }
+      this.emitUpdates()
 
       removeEvent(document.documentElement, eventsFor.move, this.handleMove)
     },
@@ -600,6 +603,12 @@ export default {
       const y = Math.round((pendingY / this.scale) / grid[1]) * grid[1]
 
       return [x, y]
+    },
+    emitUpdates: function () {
+      this.$emit('update:x', this.left)
+      this.$emit('update:y', this.top)
+      this.$emit('update:w', this.width)
+      this.$emit('update:h', this.height)
     }
   },
   computed: {
